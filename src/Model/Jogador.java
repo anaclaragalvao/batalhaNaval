@@ -136,6 +136,17 @@ class Jogador extends Observable {
         return true;
     }
 
+    protected void carregarMatrizDeArquivo(String caminhoArquivo) {
+        this.matriz = RecuperaMatriz.carregarMatriz(caminhoArquivo);
+        for(int i = 0; i< 15; i++){
+            for(int j = 0; j< 15; j++){
+                System.out.println(matriz[i][j]);
+            }
+        }
+
+
+    }
+
 
     protected int[][] getMatriz() {
         return matriz;
@@ -143,28 +154,58 @@ class Jogador extends Observable {
 
     protected void setMatriz(int[][] matriz) {
         this.matriz = matriz;
-        setChanged();
-        notifyObservers();
     }
 
     protected void salvarMatrizEmArquivo(String caminhoArquivo) {
         SalvadorMatriz.salvarMatriz(matriz, caminhoArquivo);
     }
 
+
     protected void resetTabuleiro() {
         this.matriz = new int[15][15];
-        setChanged();
-        notifyObservers();
     }
 
     protected int registrarTiro(int linha, int coluna) {
         int resultado = tiros.atirar(getMatriz(), linha, coluna);
+        /*
         if (resultado != -1) {
             setChanged();
             notifyObservers();
         }
+
+         */
         return resultado;
     }
+
+    /*
+    public void registrarTirosView(int linha, int coluna){
+        for (int i = 0; i < 15; i++){
+            for (int j = 0; j < 15; j++){
+                if(matriz[i][j]==-10){//acertou água
+                    return -10 ;
+                }
+                else if(jogador1.getMatriz()[i][j]==-1){
+                    tiro1 = true;
+                }
+                else if(jogador1.getMatriz()[i][j]==-2){
+                    tiro2 = true;
+                }
+                else if(jogador1.getMatriz()[i][j]==-3){
+                    tiro3 = true;
+                }
+                else if(jogador1.getMatriz()[i][j]==-4){
+                    tiro4 = true;
+                }
+                else if(jogador1.getMatriz()[i][j]==-5){
+                    tiro5 = true;
+                }
+
+            }
+        }
+
+        }
+
+     */
 
     protected boolean[][] getTiros() {
         return tiros.getTiros();

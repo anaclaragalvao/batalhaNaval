@@ -30,12 +30,13 @@ public class TabuleiroTiro extends JFrame implements Observable {
     private TabuleiroPanel player1Tabuleiro;
     private TabuleiroPanel player2Tabuleiro;
     private JButton atirarButton;
+    private JButton salvarButton;
 
     private int selectedRow = -1;
     private int selectedCol = -1;
 
     private List<Observer> observers = new ArrayList<>();
-    private boolean tiro = false;
+    private boolean tiro, salvar = false;
 
     public TabuleiroTiro(String player1Name, String player2Name) {
         this.player1Name = player1Name;
@@ -81,11 +82,25 @@ public class TabuleiroTiro extends JFrame implements Observable {
             }
         });
 
+        salvarButton = new JButton("Salvar");
+        salvarButton.setPreferredSize(new Dimension(100, 50)); // Define o tamanho do botão "Salvar"
+        salvarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleSaveButton();
+            }
+        });
+
         setLayout(new BorderLayout());
+
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.add(salvarButton, BorderLayout.EAST);
+
         JPanel tabuleirosPanel = new JPanel(new GridLayout(1, 2));
         tabuleirosPanel.add(player1Tabuleiro);
         tabuleirosPanel.add(player2Tabuleiro);
 
+        add(topPanel, BorderLayout.NORTH);
         add(tabuleirosPanel, BorderLayout.CENTER);
         add(atirarButton, BorderLayout.SOUTH);
     }
@@ -120,6 +135,10 @@ public class TabuleiroTiro extends JFrame implements Observable {
             dados[2] = selectedCol;
             dados[3] = currentPlayer;
             tiro = false;
+        }
+        else if(salvar){
+            dados[0] = "Salve o jogo";
+            salvar = false;
         }
         return dados;
     }
@@ -282,6 +301,12 @@ public class TabuleiroTiro extends JFrame implements Observable {
         } else {
             System.out.println("Nenhum quadrado selecionado.");
         }
+    }
+
+    private void handleSaveButton() {
+        salvar = true;
+        notifyObservers();
+        JOptionPane.showMessageDialog(this, "Jogo salvo!");
     }
 
     private boolean checkVictory(int[][] embarcacoes) {

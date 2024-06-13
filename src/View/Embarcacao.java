@@ -81,7 +81,7 @@ public class Embarcacao {
             cell.setRect(anchorX + newRelativeX, anchorY + newRelativeY, cellSize, cellSize);
         }
         // Alterna a orientação
-        orientacao = (orientacao + 1) % 2;
+        orientacao = (orientacao + 1) % 4;
     }
 
     public void setErrored(boolean errored) {

@@ -4,11 +4,14 @@ import Model.ModelAPI;
 import View.InserirNome;
 import View.Tabuleiro;
 import View.TabuleiroTiro;
+import View.TelaInicio;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Controller implements Observer {
     private ModelAPI model;
@@ -19,11 +22,12 @@ public class Controller implements Observer {
     Observable obs;
     Object[] dados;
     String tipo;
+    private File saveFile1;
+    private File saveFile2;
 
     public Controller() {
         model = ModelAPI.getInstance();
         model.addObserver(this);
-
         currentPlayer = 1;
     }
 
@@ -87,23 +91,24 @@ public class Controller implements Observer {
                 System.out.println("Dados: " + java.util.Arrays.toString(dados));
                 break;
 
+            case "Salve o jogo":
+                salvaroJogo();
+                break;
+
         }
         return;
     }
 
-    public void ResultadoTiro(int resultado){
+    public void ResultadoTiro(int resultado) {
         if (tabuleiroTiro != null) {
             tabuleiroTiro.atirou(resultado);
         }
     }
 
     public void inserir(int jogador, int tipoNavio, int linhaInicial, int colunaInicial, String orientacao) {
-        model.salvarMatriz(jogador);
+        //model.salvarMatriz(jogador);
         model.inserirNavio(jogador, tipoNavio, linhaInicial, colunaInicial, orientacao);
-        return ;
     }
-
-
 
     public void handleInsercao(boolean result) {
         if (!result) {
@@ -111,24 +116,17 @@ public class Controller implements Observer {
             tabuleiro.selectShip();
             tabuleiro.setIsConfirming(false);
             resetTabuleiro(currentPlayer);
-        } else {
-            System.out.println("Ta chegando aqui");
-
-            // Check if all ships for the current player are inserted
-
         }
     }
 
-    public void switchPlayer(){
-        if(currentPlayer==1) {
+    public void switchPlayer() {
+        if(currentPlayer == 1) {
             currentPlayer = 2;
             tabuleiro.setCurrentPlayer(2);
-            tabuleiro.initializeShips();  // Initialize ships for player 2
+            tabuleiro.initializeShips();
             tabuleiro.setIsConfirming(false);
             tabuleiro.repaint();
-        }
-
-        else {
+        } else {
             JOptionPane.showMessageDialog(tabuleiro, "Ambos os jogadores posicionaram suas embarcações. O jogo pode começar!");
             tabuleiro.dispose();
         }
@@ -140,7 +138,6 @@ public class Controller implements Observer {
 
     public void registrarTiro(int linha, int coluna, int jogador) {
         model.registrarTiro(linha, coluna, jogador);
-        return;
     }
 
     public boolean[][] getTiros(int jogador) {
@@ -155,37 +152,105 @@ public class Controller implements Observer {
         model.salvarMatriz(jogador);
     }
 
+    private File getSaveFile(int jogador) {
+        return jogador == 1 ? saveFile1 : saveFile2;
+    }
+
+    public void salvaroJogo() {
+
+        model.salvarMatriz(1);
+        model.salvarMatriz(2);
+    }
+
+    private static void processarArquivos(File file1, File file2, Controller controller, String nome1, String nome2) {
+        TabuleiroTiro tabuleiroTiro = new TabuleiroTiro(nome1, nome2);
+        tabuleiroTiro.addObserver(controller);
+        controller.setTabuleiroTiro(tabuleiroTiro);
+        tabuleiroTiro.setVisible(true);
+        controller.model.carregarMatriz(1, file1.getPath());
+        controller.model.carregarMatriz(2, file2.getPath());
+
+    }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            JFrame panel = new JFrame();
-            InserirNome gui = InserirNome.getInstance(panel);
-            gui.setVisible(true);
+            // Criação da tela inicial
+            TelaInicio telaInicio = new TelaInicio();
+            telaInicio.setVisible(true);
 
-            if (gui.nome1 != null && gui.nome2 != null) {
-                ModelAPI.getInstance().setNome(1, gui.nome1);
-                ModelAPI.getInstance().setNome(2, gui.nome2);
+            telaInicio.getStartButton().addActionListener(e -> { // Caso eu selecione a opção de Iniciar um novo jogo
+                JFrame panel = new JFrame();
+                InserirNome gui = InserirNome.getInstance(panel);
+                gui.setVisible(true);
 
-                Controller controller = getInstance();
-                Tabuleiro tabuleiro = Tabuleiro.getInstance(gui.nome1, gui.nome2);
-                controller.setTabuleiro(tabuleiro);
-                tabuleiro.addObserver(controller);
-                tabuleiro.setVisible(true);
+                if (gui.nome1 != null && gui.nome2 != null) {
 
-                // Adicionar um WindowListener para detectar quando a janela de inserção for fechada
-                tabuleiro.addWindowListener(new WindowAdapter() {
-                    @Override
-                    public void windowClosed(WindowEvent e) {
-                        SwingUtilities.invokeLater(() -> {
-                            TabuleiroTiro tabuleiroTiro = TabuleiroTiro.getInstance(gui.nome1, gui.nome2);
-                            tabuleiroTiro.addObserver(controller);
-                            controller.setTabuleiroTiro(tabuleiroTiro);
-                            tabuleiroTiro.setVisible(true);
-                        });
+                    ModelAPI.getInstance().setNome(1, gui.nome1);
+                    ModelAPI.getInstance().setNome(2, gui.nome2);
+
+                    Controller controller = getInstance();
+                    Tabuleiro tabuleiro = Tabuleiro.getInstance(gui.nome1, gui.nome2);
+                    controller.setTabuleiro(tabuleiro);
+                    tabuleiro.addObserver(controller);
+                    tabuleiro.setVisible(true);
+
+                    // Adicionar um WindowListener para detectar quando a janela de inserção for fechada
+                    tabuleiro.addWindowListener(new WindowAdapter() {
+                        @Override
+                        public void windowClosed(WindowEvent e) {
+                            SwingUtilities.invokeLater(() -> {
+                                TabuleiroTiro tabuleiroTiro = TabuleiroTiro.getInstance(gui.nome1, gui.nome2);
+                                tabuleiroTiro.addObserver(controller);
+                                controller.setTabuleiroTiro(tabuleiroTiro);
+                                tabuleiroTiro.setVisible(true);
+                            });
+                        }
+                    });
+                } else {
+                    System.out.println("Nomes dos jogadores não inseridos corretamente.");
+                }
+            });
+
+            telaInicio.getLoadButton().addActionListener(e -> { // Caso eu selecione a opção de carregar
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setMultiSelectionEnabled(false);
+                int returnValue1 = fileChooser.showOpenDialog(null);
+                if (returnValue1 == JFileChooser.APPROVE_OPTION) {
+                    File selectedFile1 = fileChooser.getSelectedFile();
+                    System.out.println(selectedFile1);
+
+                    int returnValue2 = fileChooser.showOpenDialog(null);
+                    if (returnValue2 == JFileChooser.APPROVE_OPTION) {
+                        File selectedFile2 = fileChooser.getSelectedFile();
+                        System.out.println(selectedFile2);
+                        JFrame panel = new JFrame();
+                        Controller controller = getInstance();
+                        InserirNome gui = InserirNome.getInstance(panel);
+                        gui.setVisible(true);
+
+                        if (gui.nome1 != null && gui.nome2 != null) {
+                            ModelAPI.getInstance().setNome(1, gui.nome1);
+                            ModelAPI.getInstance().setNome(2, gui.nome2);
+                            processarArquivos(selectedFile1, selectedFile2, controller, gui.nome1, gui.nome2);
+
+                            SwingUtilities.invokeLater(() -> {
+                                TabuleiroTiro tabuleiroTiro = TabuleiroTiro.getInstance(gui.nome1, gui.nome2);
+                                tabuleiroTiro.addObserver(controller);
+                                controller.setTabuleiroTiro(tabuleiroTiro);
+                                tabuleiroTiro.setVisible(true);
+                            });
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Nomes dos jogadores não inseridos corretamente.");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Por favor, selecione o segundo arquivo.");
                     }
-                });
-            } else {
-                System.out.println("Nomes dos jogadores não inseridos corretamente.");
-            }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Por favor, selecione o primeiro arquivo.");
+                }
+            });
         });
     }
+
+
 }

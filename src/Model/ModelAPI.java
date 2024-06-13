@@ -3,6 +3,7 @@ package Model;
 import Controller.Observer;
 import Controller.Observable;
 
+import java.io.File;
 import java.util.*;
 
 public class ModelAPI implements Observable {
@@ -47,7 +48,6 @@ public class ModelAPI implements Observable {
             inseriuCerto = false;
         } else if (inseriuErrado) {
             dados[0] = "inseriu errado";
-            dados[1]=
             inseriuErrado = false;
         }
         else if(inseriuTodos1){
@@ -84,11 +84,7 @@ public class ModelAPI implements Observable {
             dados[1]= 10;
             tiro6 = false;
         }
-        else if(tiro7){
-            dados[0]="Tentou acertar um lugar já atirado";
-            dados[1]= 11;
-            tiro7 = false;
-        }
+
 
 
         return dados;
@@ -156,7 +152,7 @@ public class ModelAPI implements Observable {
         } else {
             jogador2.resetTabuleiro();
         }
-        notifyObservers();
+        //notifyObservers();
     }
 
     public void registrarTiro(int linha, int coluna, int jogador) {
@@ -187,10 +183,7 @@ public class ModelAPI implements Observable {
             tiro6 = true;
 
         }
-        else if(result==-1){
-            tiro7 = true;
 
-        }
         notifyObservers();
         return;
     }
@@ -201,7 +194,7 @@ public class ModelAPI implements Observable {
         } else {
             jogador2.setNome(nome);
         }
-        notifyObservers();
+        //notifyObservers();
     }
 
     public boolean[][] getTiros(int jogador) {
@@ -220,11 +213,78 @@ public class ModelAPI implements Observable {
         }
     }
 
+    public void carregarMatriz(int jogador, String caminhoArquivo) {
+        System.out.println("Carregar matriz para jogador: " + jogador + " do arquivo: " + caminhoArquivo);
+        if (jogador == 1) {
+            jogador1.carregarMatrizDeArquivo(caminhoArquivo);
+            System.out.println(jogador1.getMatriz());
+            registrarTirosView(1);
+        } else {
+            jogador2.carregarMatrizDeArquivo(caminhoArquivo);
+            registrarTirosView(2);
+        }
+    }
+
+    public void registrarTirosView(int jogador){
+        System.out.println(jogador1.getMatriz());
+        if(jogador==1){
+            for (int i = 0; i < 15; i++){
+                for (int j = 0; j < 15; j++){
+                    if(jogador1.getMatriz()[i][j]==-10){//acertou água
+                        tiro6 = true;
+                    }
+                    else if(jogador1.getMatriz()[i][j]==-1){
+                        tiro1 = true;
+                    }
+                    else if(jogador1.getMatriz()[i][j]==-2){
+                        tiro2 = true;
+                    }
+                    else if(jogador1.getMatriz()[i][j]==-3){
+                        tiro3 = true;
+                    }
+                    else if(jogador1.getMatriz()[i][j]==-4){
+                        tiro4 = true;
+                    }
+                    else if(jogador1.getMatriz()[i][j]==-5){
+                        tiro5 = true;
+                    }
+
+                }
+            }
+        }
+        else{
+            for (int i = 0; i < 15; i++){
+                for (int j = 0; j < 15; j++){
+                    if(jogador2.getMatriz()[i][j]==-10){//acertou água
+                        tiro6 = true;
+                    }
+                    else if(jogador2.getMatriz()[i][j]==-1){
+                        tiro1 = true;
+                    }
+                    else if(jogador2.getMatriz()[i][j]==-2){
+                        tiro2 = true;
+                    }
+                    else if(jogador2.getMatriz()[i][j]==-3){
+                        tiro3 = true;
+                    }
+                    else if(jogador2.getMatriz()[i][j]==-4){
+                        tiro4 = true;
+                    }
+                    else if(jogador2.getMatriz()[i][j]==-5){
+                        tiro5 = true;
+                    }
+
+                }
+            }
+        }
+        notifyObservers();
+    }
+
     public void salvarMatriz(int jogador) {
         if (jogador == 1) {
-            jogador1.salvarMatrizEmArquivo("matriz1nova.txt");
+            jogador1.salvarMatrizEmArquivo("matriz1");
         } else {
-            jogador2.salvarMatrizEmArquivo("matriz2nova.txt");
+            jogador2.salvarMatrizEmArquivo("matriz2");
         }
     }
 
