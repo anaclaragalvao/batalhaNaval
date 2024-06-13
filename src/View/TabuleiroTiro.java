@@ -248,6 +248,23 @@ public class TabuleiroTiro extends JFrame implements Observable {
         }
         return null;
     }
+    
+    private void showMessage(String message) {
+        final JDialog dialog = new JDialog(this, true);
+        dialog.setUndecorated(true);
+        dialog.getContentPane().add(new JLabel(message, SwingConstants.CENTER), BorderLayout.CENTER);
+        dialog.setSize(300, 100);
+        dialog.setLocationRelativeTo(this);
+        Timer timer = new Timer(1500, new ActionListener() { // Mostra por 1.5 segundos
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dialog.dispose();
+            }
+        });
+        timer.setRepeats(false);
+        timer.start();
+        dialog.setVisible(true);
+    }
 
     public void atirou(int resultado) {
         if(currentPlayer == 1) {
@@ -262,7 +279,7 @@ public class TabuleiroTiro extends JFrame implements Observable {
             if (tirosRestantes == 0) {
                 currentPlayer = 2;
                 tirosRestantes = 3;
-                JOptionPane.showMessageDialog(this, "Vez do " + player2Name);
+                showMessage("Vez do " + player2Name);
             }
             selectedRow = -1;
             selectedCol = -1;
@@ -279,7 +296,7 @@ public class TabuleiroTiro extends JFrame implements Observable {
             if (tirosRestantes == 0) {
                 currentPlayer = 1;
                 tirosRestantes = 3;
-                JOptionPane.showMessageDialog(this, "Vez do " + player1Name);
+                showMessage("Vez do " + player1Name);
             }
             selectedRow = -1;
             selectedCol = -1;
