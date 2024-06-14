@@ -192,11 +192,23 @@ public class TabuleiroTiro extends JFrame implements Observable {
 
                     if (shots[i][j]) {
                         if (embarcacoes[i][j] < 0) {
-                            if (embarcacoes[i][j] == -10) {
-                                g2d.setColor(Color.BLUE); // Tiro na água
+                            if (embarcacoes[i][j] == -1) {
+                                g2d.setColor(Color.GREEN); // Tiro que acertou um submarino
                                 g2d.fill(cell);
-                            } else {
-                                g2d.setColor(Color.RED); // Tiro que acertou uma embarcação
+                            } else if (embarcacoes[i][j] == -2){
+                                g2d.setColor(Color.YELLOW); // Tiro que acertou um destroyer
+                                g2d.fill(cell);
+                            } else if (embarcacoes[i][j] == -3) {
+                            	g2d.setColor(Color.CYAN); // Tiro que acertou um hidroaviao
+                                g2d.fill(cell);
+                            } else if (embarcacoes[i][j] == -4) {
+                            	g2d.setColor(Color.ORANGE); // Tiro que acertou um cruzador
+                                g2d.fill(cell);
+                            } else if (embarcacoes[i][j] == -5) {
+                            	g2d.setColor(Color.PINK); // Tiro que acertou um couraçado
+                                g2d.fill(cell);
+                            } else { // embarcacoes[i][j]==-10
+                            	g2d.setColor(Color.BLUE); // Tiro na água
                                 g2d.fill(cell);
                             }
                         }

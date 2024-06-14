@@ -466,7 +466,7 @@ public class Tabuleiro extends JFrame implements Observable{
                 int y = baseY + coord[1] * CELL_SIZE;
                 cells.add(new Rectangle2D.Double(x, y, CELL_SIZE, CELL_SIZE));
             }
-            ships.add(new Embarcacao(cells, Color.BLUE, 3));
+            ships.add(new Embarcacao(cells, Color.CYAN, 3));
         }
     }
 
