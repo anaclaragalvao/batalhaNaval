@@ -79,6 +79,7 @@ public class Controller implements Observer {
 
             case "atirou":
                 registrarTiro((int) dados[1], (int) dados[2], (int) dados[3]);
+                break;
 
             case "Acertou um submarino!":
             case "Acertou um destroyer!":
@@ -94,6 +95,17 @@ public class Controller implements Observer {
             case "Salve o jogo":
                 salvaroJogo();
                 break;
+
+            case "submarino":
+            case "destroyer":
+            case "couracado":
+            case "hidroaviao":
+            case "agua":
+            case "cruzador":
+                recuperarView((int) dados[1], (int) dados[2], (int) dados[3], (int) dados[4]);
+                System.out.println("Dados: " + java.util.Arrays.toString(dados));
+                break;
+
 
         }
         return;
@@ -132,6 +144,10 @@ public class Controller implements Observer {
         }
     }
 
+    public void recuperarView(int jogador, int navio, int linha, int coluna){
+        tabuleiroTiro.recuperarTiro(jogador, navio, linha, coluna);
+    }
+
     public void resetTabuleiro(int jogador) {
         model.resetTabuleiro(jogador);
     }
@@ -162,7 +178,7 @@ public class Controller implements Observer {
         model.salvarMatriz(2);
     }
 
-    private static void processarArquivos(File file1, File file2, Controller controller, String nome1, String nome2) {
+    /*private static void processarArquivos(File file1, File file2, Controller controller, String nome1, String nome2) {
         TabuleiroTiro tabuleiroTiro = new TabuleiroTiro(nome1, nome2);
         tabuleiroTiro.addObserver(controller);
         controller.setTabuleiroTiro(tabuleiroTiro);
@@ -171,6 +187,8 @@ public class Controller implements Observer {
         controller.model.carregarMatriz(2, file2.getPath());
 
     }
+
+     */
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -231,13 +249,19 @@ public class Controller implements Observer {
                         if (gui.nome1 != null && gui.nome2 != null) {
                             ModelAPI.getInstance().setNome(1, gui.nome1);
                             ModelAPI.getInstance().setNome(2, gui.nome2);
-                            processarArquivos(selectedFile1, selectedFile2, controller, gui.nome1, gui.nome2);
+                            //processarArquivos(selectedFile1, selectedFile2, controller, gui.nome1, gui.nome2);
 
                             SwingUtilities.invokeLater(() -> {
+
                                 TabuleiroTiro tabuleiroTiro = TabuleiroTiro.getInstance(gui.nome1, gui.nome2);
                                 tabuleiroTiro.addObserver(controller);
                                 controller.setTabuleiroTiro(tabuleiroTiro);
+                                controller.model.carregarMatriz(1, selectedFile1.getPath());
+                                controller.model.carregarMatriz(2, selectedFile2.getPath());
                                 tabuleiroTiro.setVisible(true);
+
+
+
                             });
                         } else {
                             JOptionPane.showMessageDialog(null, "Nomes dos jogadores não inseridos corretamente.");

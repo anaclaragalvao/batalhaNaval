@@ -11,8 +11,9 @@ public class ModelAPI implements Observable {
     private Jogador jogador1;
     private Jogador jogador2;
     private List<Observer> observers = new ArrayList<>();
-    private boolean inseriuCerto, inseriuErrado, inseriuTodos1, tiro1, tiro2, tiro3, tiro4, tiro5, tiro6, tiro7 = false;
+    private boolean inseriuCerto, inseriuErrado, inseriuTodos1, tiro1, tiro2, tiro3, tiro4, tiro5, tiro6, tiro6Diferente, tiro1Diferente, tiro2Diferente, tiro3Diferente,tiro4Diferente,tiro5Diferente = false;
     int count1, count2 = 0;
+    int currentPlayer, selectedColumn, selecetedRow = 0;
 
     public ModelAPI() {
         jogador1 = new Jogador();
@@ -84,9 +85,55 @@ public class ModelAPI implements Observable {
             dados[1]= 10;
             tiro6 = false;
         }
-
-
-
+        else if(tiro1Diferente){
+            dados[0] = "submarino";
+            dados[1] = currentPlayer;
+            dados[2] = 1;
+            dados[3] = selecetedRow;
+            dados[4] = selectedColumn;
+            tiro1Diferente=false;
+        }
+        else if(tiro2Diferente){
+            dados[0] = "destroyer";
+            dados[1] = currentPlayer;
+            dados[2] = 2;
+            dados[3] = selecetedRow;
+            dados[4] = selectedColumn;
+            tiro2Diferente=false;
+        }
+        else if(tiro3Diferente){
+            dados[0] = "hidroaviao";
+            dados[1] = currentPlayer;
+            dados[2] = 3;
+            dados[3] = selecetedRow;
+            dados[4] = selectedColumn;
+            tiro3Diferente=false;
+        }
+        else if(tiro4Diferente){
+            dados[0] = "cruzador";
+            dados[1] = currentPlayer;
+            dados[2] = 4;
+            dados[3] = selecetedRow;
+            dados[4] = selectedColumn;
+            tiro4Diferente=false;
+        }
+        else if(tiro5Diferente){
+            dados[0] = "couracado";
+            dados[1] = currentPlayer;
+            dados[2] = 5;
+            dados[3] = selecetedRow;
+            dados[4] = selectedColumn;
+            tiro5Diferente=false;
+        }
+        else if(tiro6Diferente){
+            dados[0] = "agua";
+            dados[1] = currentPlayer;
+            dados[2] = 10;
+            dados[3] = selecetedRow;
+            dados[4] = selectedColumn;
+            tiro6Diferente=false;
+        }
+        System.out.println(dados);
         return dados;
     }
 
@@ -163,7 +210,6 @@ public class ModelAPI implements Observable {
             result = jogador1.registrarTiro(linha, coluna);
         }
         if(result==1){
-
             tiro1 = true;
         }
         else if(result==2){
@@ -217,7 +263,7 @@ public class ModelAPI implements Observable {
         System.out.println("Carregar matriz para jogador: " + jogador + " do arquivo: " + caminhoArquivo);
         if (jogador == 1) {
             jogador1.carregarMatrizDeArquivo(caminhoArquivo);
-            System.out.println(jogador1.getMatriz());
+            //System.out.println(jogador1.getMatriz());
             registrarTirosView(1);
         } else {
             jogador2.carregarMatrizDeArquivo(caminhoArquivo);
@@ -226,58 +272,76 @@ public class ModelAPI implements Observable {
     }
 
     public void registrarTirosView(int jogador){
-        System.out.println(jogador1.getMatriz());
+        //System.out.println(jogador1.getMatriz());
         if(jogador==1){
+            currentPlayer = 1;
             for (int i = 0; i < 15; i++){
                 for (int j = 0; j < 15; j++){
+                    selecetedRow=i; selectedColumn = j;
                     if(jogador1.getMatriz()[i][j]==-10){//acertou água
-                        tiro6 = true;
+                        tiro6Diferente = true;
+                        notifyObservers();
                     }
                     else if(jogador1.getMatriz()[i][j]==-1){
-                        tiro1 = true;
+                        tiro1Diferente = true;
+                        notifyObservers();
                     }
+
                     else if(jogador1.getMatriz()[i][j]==-2){
-                        tiro2 = true;
+                        tiro2Diferente = true;
+                        notifyObservers();
                     }
                     else if(jogador1.getMatriz()[i][j]==-3){
-                        tiro3 = true;
+                        tiro3Diferente = true;
+                        notifyObservers();
                     }
                     else if(jogador1.getMatriz()[i][j]==-4){
-                        tiro4 = true;
+                        tiro4Diferente = true;
+                        notifyObservers();
                     }
                     else if(jogador1.getMatriz()[i][j]==-5){
-                        tiro5 = true;
+                        tiro5Diferente = true;
+                        notifyObservers();
                     }
+
 
                 }
             }
         }
         else{
+            currentPlayer = 2;
             for (int i = 0; i < 15; i++){
                 for (int j = 0; j < 15; j++){
+                    selecetedRow=i; selectedColumn = j;
                     if(jogador2.getMatriz()[i][j]==-10){//acertou água
-                        tiro6 = true;
+                        tiro6Diferente = true;
+                        notifyObservers();
                     }
                     else if(jogador2.getMatriz()[i][j]==-1){
-                        tiro1 = true;
+                        tiro1Diferente = true;
+                        notifyObservers();
                     }
                     else if(jogador2.getMatriz()[i][j]==-2){
-                        tiro2 = true;
+                        tiro2Diferente = true;
+                        notifyObservers();
                     }
                     else if(jogador2.getMatriz()[i][j]==-3){
-                        tiro3 = true;
+                        tiro3Diferente = true;
+                        notifyObservers();
                     }
                     else if(jogador2.getMatriz()[i][j]==-4){
-                        tiro4 = true;
+                        tiro4Diferente = true;
+                        notifyObservers();
                     }
                     else if(jogador2.getMatriz()[i][j]==-5){
-                        tiro5 = true;
+                        tiro5Diferente = true;
+                        notifyObservers();
                     }
 
                 }
             }
         }
-        notifyObservers();
+
     }
 
     public void salvarMatriz(int jogador) {

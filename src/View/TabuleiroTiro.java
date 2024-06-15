@@ -192,11 +192,23 @@ public class TabuleiroTiro extends JFrame implements Observable {
 
                     if (shots[i][j]) {
                         if (embarcacoes[i][j] < 0) {
-                            if (embarcacoes[i][j] == -10) {
-                                g2d.setColor(Color.BLUE); // Tiro na água
+                            if (embarcacoes[i][j] == -1) {
+                                g2d.setColor(Color.GREEN); // Tiro que acertou um submarino
                                 g2d.fill(cell);
-                            } else {
-                                g2d.setColor(Color.RED); // Tiro que acertou uma embarcação
+                            } else if (embarcacoes[i][j] == -2){
+                                g2d.setColor(Color.YELLOW); // Tiro que acertou um destroyer
+                                g2d.fill(cell);
+                            } else if (embarcacoes[i][j] == -3) {
+                                g2d.setColor(Color.CYAN); // Tiro que acertou um hidroaviao
+                                g2d.fill(cell);
+                            } else if (embarcacoes[i][j] == -4) {
+                                g2d.setColor(Color.ORANGE); // Tiro que acertou um cruzador
+                                g2d.fill(cell);
+                            } else if (embarcacoes[i][j] == -5) {
+                                g2d.setColor(Color.PINK); // Tiro que acertou um couraçado
+                                g2d.fill(cell);
+                            } else { // embarcacoes[i][j]==-10
+                                g2d.setColor(Color.BLUE); // Tiro na água
                                 g2d.fill(cell);
                             }
                         }
@@ -249,6 +261,36 @@ public class TabuleiroTiro extends JFrame implements Observable {
         return null;
     }
 
+    public void recuperarTiro(int jogador, int resultado, int linha, int coluna){
+        if(jogador == 1){
+            player1Shots[linha][coluna] = true;
+            player1Embarcacoes[linha][coluna] = -resultado;
+            repaint();
+        }
+        else{
+            player2Shots[linha][coluna] = true;
+            player2Embarcacoes[linha][coluna] = -resultado;
+            repaint();
+        }
+    }
+
+    private void showMessage(String message) {
+        final JDialog dialog = new JDialog(this, true);
+        dialog.setUndecorated(true);
+        dialog.getContentPane().add(new JLabel(message, SwingConstants.CENTER), BorderLayout.CENTER);
+        dialog.setSize(300, 100);
+        dialog.setLocationRelativeTo(this);
+        Timer timer = new Timer(1500, new ActionListener() { // Mostra por 1.5 segundos
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dialog.dispose();
+            }
+        });
+        timer.setRepeats(false);
+        timer.start();
+        dialog.setVisible(true);
+    }
+
     public void atirou(int resultado) {
         if(currentPlayer == 1) {
             player2Shots[selectedRow][selectedCol] = true;
@@ -262,7 +304,7 @@ public class TabuleiroTiro extends JFrame implements Observable {
             if (tirosRestantes == 0) {
                 currentPlayer = 2;
                 tirosRestantes = 3;
-                JOptionPane.showMessageDialog(this, "Vez do " + player2Name);
+                showMessage("Vez do " + player2Name);
             }
             selectedRow = -1;
             selectedCol = -1;
@@ -279,7 +321,7 @@ public class TabuleiroTiro extends JFrame implements Observable {
             if (tirosRestantes == 0) {
                 currentPlayer = 1;
                 tirosRestantes = 3;
-                JOptionPane.showMessageDialog(this, "Vez do " + player1Name);
+                showMessage("Vez do " + player1Name);
             }
             selectedRow = -1;
             selectedCol = -1;

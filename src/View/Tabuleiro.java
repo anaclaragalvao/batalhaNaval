@@ -102,7 +102,18 @@ public class Tabuleiro extends JFrame implements Observable{
             String coordenadaInicial = selectedShip.getCoordenadaInicial(startX, startY);
             int[] coordenada = converterCoordenada(coordenadaInicial);
             if (coordenada != null) {
-                String orientacao = selectedShip.getOrientacao() == 0 ? "horizontal" : "vertical";
+                String orientacao;
+                if (selectedShip.getOrientacao() == 0) {
+                    orientacao = "leste";
+                } else if (selectedShip.getOrientacao() == 1) {
+                    orientacao = "sul";
+                } else if (selectedShip.getOrientacao() == 2) {
+                    orientacao = "oeste";
+                } else if (selectedShip.getOrientacao() == 3) {
+                    orientacao = "norte";
+                } else {
+                    orientacao = "leste"; // Orientação padrão
+                }
 
                 dados[0] = "Inserir";
                 dados[1] = currentPlayer;
@@ -455,7 +466,7 @@ public class Tabuleiro extends JFrame implements Observable{
                 int y = baseY + coord[1] * CELL_SIZE;
                 cells.add(new Rectangle2D.Double(x, y, CELL_SIZE, CELL_SIZE));
             }
-            ships.add(new Embarcacao(cells, Color.BLUE, 3));
+            ships.add(new Embarcacao(cells, Color.CYAN, 3));
         }
     }
 
