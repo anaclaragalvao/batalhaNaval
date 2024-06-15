@@ -344,11 +344,11 @@ public class ModelAPI implements Observable {
 
     }
 
-    public void salvarMatriz(int jogador) {
+    public void salvarMatriz(int jogador,String caminho) {
         if (jogador == 1) {
-            jogador1.salvarMatrizEmArquivo("matriz1");
+            jogador1.salvarMatrizEmArquivo(caminho);
         } else {
-            jogador2.salvarMatrizEmArquivo("matriz2");
+            jogador2.salvarMatrizEmArquivo(caminho);
         }
     }
 
