@@ -216,23 +216,20 @@ public class TabuleiroTiro extends JFrame implements Observable {
                         if (embarcacoes[i][j] < 0) {
                             if (embarcacoes[i][j] == -1) {
                                 g2d.setColor(Color.GREEN); // Tiro que acertou um submarino
-                                g2d.fill(cell);
                             } else if (embarcacoes[i][j] == -2){
                                 g2d.setColor(Color.YELLOW); // Tiro que acertou um destroyer
-                                g2d.fill(cell);
-                            } else if (embarcacoes[i][j] == -3) {
+                            } else if (embarcacoes[i][j] == -3 || embarcacoes[i][j] == -7) {
                                 g2d.setColor(Color.CYAN); // Tiro que acertou um hidroaviao
-                                g2d.fill(cell);
                             } else if (embarcacoes[i][j] == -4) {
                                 g2d.setColor(Color.ORANGE); // Tiro que acertou um cruzador
-                                g2d.fill(cell);
                             } else if (embarcacoes[i][j] == -5) {
                                 g2d.setColor(Color.PINK); // Tiro que acertou um couraçado
-                                g2d.fill(cell);
-                            } else { // embarcacoes[i][j]==-10
+                            } else if (embarcacoes[i][j] == -6) {
+                                g2d.setColor(Color.RED); // Embarcação afundada
+                            } else {
                                 g2d.setColor(Color.BLUE); // Tiro na água
-                                g2d.fill(cell);
                             }
+                            g2d.fill(cell);
                         }
                     } else if (selectedRow == i && selectedCol == j && this == player2Tabuleiro && currentPlayer == 1) {
                         g2d.setColor(Color.GRAY);
@@ -317,15 +314,19 @@ public class TabuleiroTiro extends JFrame implements Observable {
         if (currentPlayer == 1) {
             player2Shots[selectedRow][selectedCol] = true;
             player2Embarcacoes[selectedRow][selectedCol] = -resultado;
+            if(resultado!=10){
+                checarAfundou(2, resultado); // Verifica se a embarcação foi afundada
+            }
+
             repaint();
 
             if (checkVictory(player2Embarcacoes)) {
                 JOptionPane.showMessageDialog(this, player1Name + " venceu!");
                 System.exit(0);
             }
-            
+
             tirosRestantes--;
-            
+
             if (tirosRestantes == 0) {
                 SwingUtilities.invokeLater(() -> {
                     repaint();
@@ -350,15 +351,18 @@ public class TabuleiroTiro extends JFrame implements Observable {
         } else {
             player1Shots[selectedRow][selectedCol] = true;
             player1Embarcacoes[selectedRow][selectedCol] = -resultado;
+            if(resultado!=10){
+                checarAfundou(1, resultado); // Verifica se a embarcação foi afundada
+            }
             repaint();
 
             if (checkVictory(player1Embarcacoes)) {
                 JOptionPane.showMessageDialog(this, player2Name + " venceu!");
                 System.exit(0);
             }
-            
+
             tirosRestantes--;
-            
+
             if (tirosRestantes == 0) {
                 SwingUtilities.invokeLater(() -> {
                     repaint();
@@ -383,6 +387,114 @@ public class TabuleiroTiro extends JFrame implements Observable {
         }
     }
 
+    private void checarAfundou(int jogador, int tipoEmbarcacao) {
+        int[][] embarcacoes = (jogador == 1) ? player1Embarcacoes : player2Embarcacoes;
+        boolean afundou = true;
+
+        outerLoop:
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                if (embarcacoes[i][j] == -tipoEmbarcacao) {
+                    // Verificar afundamento específico para hidroavião
+                    if (tipoEmbarcacao == 3) {
+                        if (!verificarAfundamentoHidroaviao(embarcacoes, i, j)) {
+                            afundou = false;
+                            break outerLoop;
+                        }
+                    } else {
+                        // Verificar afundamento para outras embarcações
+                        if (!verificarAfundamento(embarcacoes, i, j, tipoEmbarcacao)) {
+                            afundou = false;
+                            break outerLoop;
+                        }
+                    }
+                }
+            }
+        }
+
+
+    }
+
+    private boolean verificarAfundamento(int[][] embarcacoes, int i, int j, int tipoEmbarcacao) {
+        int direcoes[][] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        int tamanho = Math.abs(tipoEmbarcacao); // Tamanho da embarcação (1 para submarino, 2 para destroyer, etc.)
+
+        for (int[] direcao : direcoes) {
+            int di = direcao[0], dj = direcao[1];
+            boolean afundouNaDirecao = true;
+            for (int k = 1; k < tamanho; k++) {
+                int ni = i + k * di;
+                int nj = j + k * dj;
+                if (ni < 0 || ni >= SIZE || nj < 0 || nj >= SIZE || embarcacoes[ni][nj] != -tipoEmbarcacao) {
+                    afundouNaDirecao = false;
+                    break;
+                }
+            }
+            if (afundouNaDirecao) {
+                // Marcar todas as partes da embarcação como afundadas
+                for (int k = 0; k < tamanho; k++) {
+                    int ni = i + k * di;
+                    int nj = j + k * dj;
+                    embarcacoes[ni][nj] = -6;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean verificarAfundamentoHidroaviao(int[][] embarcacoes, int i, int j) {
+        int[][] diagonais = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
+
+        // Verificar todas as diagonais do ponto inicial
+        for (int[] diagonal : diagonais) {
+            int di = diagonal[0], dj = diagonal[1];
+            int ni = i + di;
+            int nj = j + dj;
+            if (ni >= 0 && ni < SIZE && nj >= 0 && nj < SIZE && embarcacoes[ni][nj] == -3) {
+                embarcacoes[i][j] = -7;
+                embarcacoes[ni][nj] = -7;
+                return false;
+            }
+        }
+
+        // Verificar todas as diagonais novamente para encontrar -7 e marcar como -6 (afundado)
+        for (int[] diagonal : diagonais) {
+            int di = diagonal[0], dj = diagonal[1];
+            int ni = i + di;
+            int nj = j + dj;
+            if (ni >= 0 && ni < SIZE && nj >= 0 && nj < SIZE && embarcacoes[ni][nj] == -7) {
+                embarcacoes[i][j] = -7;
+                marcarAfundado(embarcacoes, i, j);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void marcarAfundado(int[][] embarcacoes, int i, int j) {
+        int[][] diagonais = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
+        List<int[]> encontrados = new ArrayList<>();
+        encontrados.add(new int[]{i, j});
+
+        // Marcar todas as células -7 nas diagonais como afundadas
+        for (int index = 0; index < encontrados.size(); index++) {
+            int[] pos = encontrados.get(index);
+            int x = pos[0];
+            int y = pos[1];
+            embarcacoes[x][y] = -6;
+            for (int[] diagonal : diagonais) {
+                int di = diagonal[0], dj = diagonal[1];
+                int ni = x + di;
+                int nj = y + dj;
+                if (ni >= 0 && ni < SIZE && nj >= 0 && nj < SIZE && embarcacoes[ni][nj] == -7) {
+                    embarcacoes[ni][nj] = -6;
+                    encontrados.add(new int[]{ni, nj});
+                }
+            }
+        }
+    }
 
 
 
