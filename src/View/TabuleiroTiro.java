@@ -109,13 +109,14 @@ public class TabuleiroTiro extends JFrame implements Observable {
         setLayout(new BorderLayout());
 
         JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.add(salvarButton, BorderLayout.EAST);
+
 
         JPanel tabuleirosPanel = new JPanel(new GridLayout(1, 2));
         tabuleirosPanel.add(player1Tabuleiro);
         tabuleirosPanel.add(player2Tabuleiro);
 
         JPanel bottomPanel = new JPanel(new GridLayout(2, 1));
+        topPanel.add(salvarButton, BorderLayout.EAST);
         bottomPanel.add(comecarButton);
         bottomPanel.add(atirarButton);
 
@@ -393,7 +394,7 @@ public class TabuleiroTiro extends JFrame implements Observable {
         player1Tabuleiro.setVisible(visiveis);
         player2Tabuleiro.setVisible(visiveis);
         atirarButton.setVisible(visiveis);
-        salvarButton.setVisible(visiveis);
+        salvarButton.setVisible(!visiveis);
         comecarButton.setVisible(!visiveis);
         repaint();
     }

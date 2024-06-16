@@ -10,8 +10,6 @@ import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Controller implements Observer {
     private ModelAPI model;
@@ -242,15 +240,19 @@ public class Controller implements Observer {
                 fileChooser.setMultiSelectionEnabled(false);
                 int returnValue1 = fileChooser.showOpenDialog(null);
                 if (returnValue1 == JFileChooser.APPROVE_OPTION) {
-                    File selectedFile1 = fileChooser.getSelectedFile();
-                    System.out.println(selectedFile1);
+                    File saveFile1 = fileChooser.getSelectedFile();
+                    System.out.println(saveFile1);
 
                     int returnValue2 = fileChooser.showOpenDialog(null);
                     if (returnValue2 == JFileChooser.APPROVE_OPTION) {
-                        File selectedFile2 = fileChooser.getSelectedFile();
-                        System.out.println(selectedFile2);
-                        JFrame panel = new JFrame();
+                        File saveFile2 = fileChooser.getSelectedFile();
+                        System.out.println(saveFile2);
+
                         Controller controller = getInstance();
+                        controller.saveFile1 = saveFile1; // Inicializa saveFile1
+                        controller.saveFile2 = saveFile2; // Inicializa saveFile2
+
+                        JFrame panel = new JFrame();
                         InserirNome gui = InserirNome.getInstance(panel);
                         gui.setVisible(true);
 
@@ -262,8 +264,8 @@ public class Controller implements Observer {
                                 TabuleiroTiro tabuleiroTiro = TabuleiroTiro.getInstance(gui.nome1, gui.nome2);
                                 tabuleiroTiro.addObserver(controller);
                                 controller.setTabuleiroTiro(tabuleiroTiro);
-                                controller.model.carregarMatriz(1, selectedFile1.getPath());
-                                controller.model.carregarMatriz(2, selectedFile2.getPath());
+                                controller.model.carregarMatriz(1, saveFile1.getPath());
+                                controller.model.carregarMatriz(2, saveFile2.getPath());
                                 tabuleiroTiro.setVisible(true);
                             });
                         } else {
@@ -277,8 +279,8 @@ public class Controller implements Observer {
                 }
             });
         });
-
     }
+
 
 
 }
