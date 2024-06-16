@@ -314,44 +314,77 @@ public class TabuleiroTiro extends JFrame implements Observable {
     }
 
     public void atirou(int resultado) {
-        if(currentPlayer == 1) {
+        if (currentPlayer == 1) {
             player2Shots[selectedRow][selectedCol] = true;
             player2Embarcacoes[selectedRow][selectedCol] = -resultado;
             repaint();
+
             if (checkVictory(player2Embarcacoes)) {
                 JOptionPane.showMessageDialog(this, player1Name + " venceu!");
                 System.exit(0);
             }
+            
             tirosRestantes--;
+            
             if (tirosRestantes == 0) {
-                currentPlayer = 2;
-                tirosRestantes = 3;
-                ocultarTabuleiros();
-                showMessage("Vez do " + player2Name);
+                SwingUtilities.invokeLater(() -> {
+                    repaint();
+                    // Adiciona uma pausa de 2 segundos antes de ocultar os tabuleiros
+                    Timer timer = new Timer(2000, new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            currentPlayer = 2;
+                            tirosRestantes = 3;
+                            ocultarTabuleiros();
+                            showMessage("Vez do " + player2Name);
+                        }
+                    });
+                    timer.setRepeats(false);
+                    timer.start();
+                });
+            } else {
+                selectedRow = -1;
+                selectedCol = -1;
+                System.out.println("Atirou no quadrado selecionado.");
             }
-            selectedRow = -1;
-            selectedCol = -1;
-            System.out.println("Atirou no quadrado selecionado.");
         } else {
             player1Shots[selectedRow][selectedCol] = true;
             player1Embarcacoes[selectedRow][selectedCol] = -resultado;
             repaint();
+
             if (checkVictory(player1Embarcacoes)) {
                 JOptionPane.showMessageDialog(this, player2Name + " venceu!");
                 System.exit(0);
             }
+            
             tirosRestantes--;
+            
             if (tirosRestantes == 0) {
-                currentPlayer = 1;
-                tirosRestantes = 3;
-                ocultarTabuleiros();
-                showMessage("Vez do " + player1Name);
+                SwingUtilities.invokeLater(() -> {
+                    repaint();
+                    // Adiciona uma pausa de 2 segundos antes de ocultar os tabuleiros
+                    Timer timer = new Timer(2000, new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            currentPlayer = 1;
+                            tirosRestantes = 3;
+                            ocultarTabuleiros();
+                            showMessage("Vez do " + player1Name);
+                        }
+                    });
+                    timer.setRepeats(false);
+                    timer.start();
+                });
+            } else {
+                selectedRow = -1;
+                selectedCol = -1;
+                System.out.println("Atirou no quadrado selecionado.");
             }
-            selectedRow = -1;
-            selectedCol = -1;
-            System.out.println("Atirou no quadrado selecionado.");
         }
     }
+
+
+
 
     private void handleShootButton() {
         if (selectedRow != -1 && selectedCol != -1) {
