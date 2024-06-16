@@ -23,6 +23,9 @@ public class TabuleiroTiro extends JFrame implements Observable {
     private boolean[][] player2Shots;
     private int[][] player1Embarcacoes;
     private int[][] player2Embarcacoes;
+    private int[][] player1Oculto;
+    private int[][] player2Oculto;
+
     private int currentPlayer;
     private int tirosRestantes;
     private static TabuleiroTiro instance;
@@ -31,6 +34,7 @@ public class TabuleiroTiro extends JFrame implements Observable {
     private TabuleiroPanel player2Tabuleiro;
     private JButton atirarButton;
     private JButton salvarButton;
+    private JButton comecarButton;
 
     private int selectedRow = -1;
     private int selectedCol = -1;
@@ -46,6 +50,8 @@ public class TabuleiroTiro extends JFrame implements Observable {
         player2Shots = new boolean[SIZE][SIZE];
         player1Embarcacoes = new int[SIZE][SIZE];
         player2Embarcacoes = new int[SIZE][SIZE];
+        player1Oculto = new int[SIZE][SIZE];
+        player2Oculto = new int[SIZE][SIZE];
         currentPlayer = 1; // Começa com o jogador 1
         tirosRestantes = 3; // Cada jogador tem 3 tiros por turno
 
@@ -57,8 +63,8 @@ public class TabuleiroTiro extends JFrame implements Observable {
         setVisible(true);
         setLocationRelativeTo(null);
 
-        player1Tabuleiro = new TabuleiroPanel(player1Shots, player1Embarcacoes, "Tabuleiro de " + player1Name);
-        player2Tabuleiro = new TabuleiroPanel(player2Shots, player2Embarcacoes, "Tabuleiro de " + player2Name);
+        player1Tabuleiro = new TabuleiroPanel(player1Shots, player1Oculto, "Tabuleiro de " + player1Name);
+        player2Tabuleiro = new TabuleiroPanel(player2Shots, player2Oculto, "Tabuleiro de " + player2Name);
 
         player1Tabuleiro.addMouseListener(new MouseAdapter() {
             @Override
@@ -91,6 +97,15 @@ public class TabuleiroTiro extends JFrame implements Observable {
             }
         });
 
+        comecarButton = new JButton("Começar Jogada");
+        comecarButton.setPreferredSize(new Dimension(200, 50)); // Define o tamanho do botão "Começar Jogada"
+        comecarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleComecarButton();
+            }
+        });
+
         setLayout(new BorderLayout());
 
         JPanel topPanel = new JPanel(new BorderLayout());
@@ -100,9 +115,15 @@ public class TabuleiroTiro extends JFrame implements Observable {
         tabuleirosPanel.add(player1Tabuleiro);
         tabuleirosPanel.add(player2Tabuleiro);
 
+        JPanel bottomPanel = new JPanel(new GridLayout(2, 1));
+        bottomPanel.add(comecarButton);
+        bottomPanel.add(atirarButton);
+
         add(topPanel, BorderLayout.NORTH);
         add(tabuleirosPanel, BorderLayout.CENTER);
-        add(atirarButton, BorderLayout.SOUTH);
+        add(bottomPanel, BorderLayout.SOUTH);
+
+        atualizarVisibilidadeTabuleiros(false);
     }
 
     public static TabuleiroTiro getInstance(String player1Name, String player2Name) {
@@ -304,6 +325,7 @@ public class TabuleiroTiro extends JFrame implements Observable {
             if (tirosRestantes == 0) {
                 currentPlayer = 2;
                 tirosRestantes = 3;
+                ocultarTabuleiros();
                 showMessage("Vez do " + player2Name);
             }
             selectedRow = -1;
@@ -321,6 +343,7 @@ public class TabuleiroTiro extends JFrame implements Observable {
             if (tirosRestantes == 0) {
                 currentPlayer = 1;
                 tirosRestantes = 3;
+                ocultarTabuleiros();
                 showMessage("Vez do " + player1Name);
             }
             selectedRow = -1;
@@ -349,6 +372,30 @@ public class TabuleiroTiro extends JFrame implements Observable {
         salvar = true;
         notifyObservers();
         JOptionPane.showMessageDialog(this, "Jogo salvo!");
+    }
+
+    private void handleComecarButton() {
+        if (currentPlayer == 1) {
+            player2Tabuleiro.embarcacoes = player2Embarcacoes;
+        } else {
+            player1Tabuleiro.embarcacoes = player1Embarcacoes;
+        }
+        atualizarVisibilidadeTabuleiros(true);
+    }
+
+    private void ocultarTabuleiros() {
+        player1Tabuleiro.embarcacoes = player1Oculto;
+        player2Tabuleiro.embarcacoes = player2Oculto;
+        atualizarVisibilidadeTabuleiros(false);
+    }
+
+    private void atualizarVisibilidadeTabuleiros(boolean visiveis) {
+        player1Tabuleiro.setVisible(visiveis);
+        player2Tabuleiro.setVisible(visiveis);
+        atirarButton.setVisible(visiveis);
+        salvarButton.setVisible(visiveis);
+        comecarButton.setVisible(!visiveis);
+        repaint();
     }
 
     private boolean checkVictory(int[][] embarcacoes) {

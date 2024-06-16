@@ -172,7 +172,7 @@ public class ModelAPI implements Observable {
 
         } else {
             if (count2 < 15) {
-                System.out.println(count1);
+                System.out.println(count2);
                 result = jogador2.inserirNavio(tipoNavio, linhaInicial, colunaInicial, orientacao);
                 if (result) {
                     count2++;
