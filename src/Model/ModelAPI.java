@@ -150,7 +150,6 @@ public class ModelAPI implements Observable {
 
         if (jogador == 1) {
             if(count1<15){
-                System.out.println(count1);
                 result = jogador1.inserirNavio(tipoNavio, linhaInicial, colunaInicial, orientacao);
                 if(result){
                     count1++;
@@ -170,7 +169,6 @@ public class ModelAPI implements Observable {
 
         } else {
             if (count2 < 15) {
-                System.out.println(count2);
                 result = jogador2.inserirNavio(tipoNavio, linhaInicial, colunaInicial, orientacao);
                 if (result) {
                     count2++;
@@ -197,7 +195,6 @@ public class ModelAPI implements Observable {
         } else {
             jogador2.resetTabuleiro();
         }
-        //notifyObservers();
     }
 
     public void registrarTiro(int linha, int coluna, int jogador) {
@@ -238,7 +235,6 @@ public class ModelAPI implements Observable {
         } else {
             jogador2.setNome(nome);
         }
-        //notifyObservers();
     }
 
     public boolean[][] getTiros(int jogador) {
@@ -261,7 +257,6 @@ public class ModelAPI implements Observable {
         System.out.println("Carregar matriz para jogador: " + jogador + " do arquivo: " + caminhoArquivo);
         if (jogador == 1) {
             jogador1.carregarMatrizDeArquivo(caminhoArquivo);
-            //System.out.println(jogador1.getMatriz());
             registrarTirosView(1);
         } else {
             jogador2.carregarMatrizDeArquivo(caminhoArquivo);
@@ -270,7 +265,6 @@ public class ModelAPI implements Observable {
     }
 
     public void registrarTirosView(int jogador){
-        //System.out.println(jogador1.getMatriz());
         if(jogador==1){
             currentPlayer = 1;
             for (int i = 0; i < 15; i++){
@@ -347,14 +341,6 @@ public class ModelAPI implements Observable {
             jogador1.salvarMatrizEmArquivo(caminho);
         } else {
             jogador2.salvarMatrizEmArquivo(caminho);
-        }
-    }
-
-    public Jogador getJogador(int jogador) {
-        if (jogador == 1) {
-            return jogador1;
-        } else {
-            return jogador2;
         }
     }
 }

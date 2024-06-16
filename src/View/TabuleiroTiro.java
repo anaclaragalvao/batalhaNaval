@@ -150,7 +150,7 @@ public class TabuleiroTiro extends JFrame implements Observable {
 
     @Override
     public Object[] get() {
-        Object[] dados = new Object[4];  // Ensure the array has correct length
+        Object[] dados = new Object[4];  
         if (tiro) {
             dados[0] = "atirou";
             dados[1] = selectedRow;
@@ -305,7 +305,7 @@ public class TabuleiroTiro extends JFrame implements Observable {
         dialog.getContentPane().add(new JLabel(message, SwingConstants.CENTER), BorderLayout.CENTER);
         dialog.setSize(300, 100);
         dialog.setLocationRelativeTo(this);
-        Timer timer = new Timer(1500, new ActionListener() { // Mostra por 1.5 segundos
+        Timer timer = new Timer(1000, new ActionListener() { // Mostra por 1 segundo
             @Override
             public void actionPerformed(ActionEvent e) {
                 dialog.dispose();
@@ -336,8 +336,8 @@ public class TabuleiroTiro extends JFrame implements Observable {
             if (tirosRestantes == 0) {
                 SwingUtilities.invokeLater(() -> {
                     repaint();
-                    // Adiciona uma pausa de 2 segundos antes de ocultar os tabuleiros
-                    Timer timer = new Timer(2000, new ActionListener() {
+                    // Adiciona uma pausa de 1 segundo antes de ocultar os tabuleiros
+                    Timer timer = new Timer(1000, new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             currentPlayer = 2;
@@ -372,8 +372,8 @@ public class TabuleiroTiro extends JFrame implements Observable {
             if (tirosRestantes == 0) {
                 SwingUtilities.invokeLater(() -> {
                     repaint();
-                    // Adiciona uma pausa de 2 segundos antes de ocultar os tabuleiros
-                    Timer timer = new Timer(2000, new ActionListener() {
+                    // Adiciona uma pausa de 1 segundo antes de ocultar os tabuleiros
+                    Timer timer = new Timer(1000, new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             currentPlayer = 1;
@@ -495,7 +495,6 @@ public class TabuleiroTiro extends JFrame implements Observable {
                 int ni = x + di;
                 int nj = y + dj;
                 if (ni >= 0 && ni < SIZE && nj >= 0 && nj < SIZE && embarcacoes[ni][nj] == -7) {
-                    System.out.println("oi 2");
                     embarcacoes[ni][nj] = -6;
                     encontrados.add(new int[]{ni, nj});
                 }
@@ -552,7 +551,6 @@ public class TabuleiroTiro extends JFrame implements Observable {
     }
 
     private boolean checkVictory(int[][] embarcacoes) {
-        System.out.println(embarcacoes);
         int countAcertos = 0;
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {

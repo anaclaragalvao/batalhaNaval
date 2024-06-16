@@ -66,7 +66,6 @@ public class Controller implements Observer {
                 break;
 
             case "inseriu certo":
-                //handleInsercao(true);
                 break;
             case "inseriu errado":
                 handleInsercao(false);
@@ -116,7 +115,6 @@ public class Controller implements Observer {
     }
 
     public void inserir(int jogador, int tipoNavio, int linhaInicial, int colunaInicial, String orientacao) {
-        //model.salvarMatriz(jogador);
         model.inserirNavio(jogador, tipoNavio, linhaInicial, colunaInicial, orientacao);
     }
 
@@ -154,24 +152,6 @@ public class Controller implements Observer {
         model.registrarTiro(linha, coluna, jogador);
     }
 
-    public boolean[][] getTiros(int jogador) {
-        return model.getTiros(jogador);
-    }
-
-    public int[][] getTabuleiro(int jogador) {
-        return model.getTabuleiro(jogador);
-    }
-
-    /*
-    public void salvarMatriz(int jogador) {
-        model.salvarMatriz(jogador);
-    }
-
-     */
-
-    private File getSaveFile(int jogador) {
-        return jogador == 1 ? saveFile1 : saveFile2;
-    }
 
     public void salvaroJogo() {
 

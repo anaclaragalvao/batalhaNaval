@@ -38,7 +38,7 @@ class Tiro {
         }
         else if(matriz[linha][coluna]==0) {
             System.out.println("Acertou a água");
-            matriz[linha][coluna]=-10;//-10 é quando acertar
+            matriz[linha][coluna]=-10;
             return 10;
         }
         else {

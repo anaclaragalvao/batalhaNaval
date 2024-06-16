@@ -95,7 +95,7 @@ public class Tabuleiro extends JFrame implements Observable{
 
     @Override
     public Object[] get() {
-        Object[] dados = new Object[6];  // Ensure the array has correct length
+        Object[] dados = new Object[6]; 
         if (inserir ) {
             int startX = getBoardStartX();
             int startY = getBoardStartY();
@@ -123,7 +123,6 @@ public class Tabuleiro extends JFrame implements Observable{
                 dados[5] = orientacao;
                 System.out.println("Dados: " + java.util.Arrays.toString(dados));
             } else {
-                // Handle null coordinate case (if necessary, add specific handling here)
                 System.out.println("Error: Coordenada is null.");
                 return new Object[0];
             }
@@ -221,7 +220,7 @@ public class Tabuleiro extends JFrame implements Observable{
                     if (ship.contains(x, y)) {
                         selectedShip = ship;
                         isShipSelected = true;
-                        selectedShip.setErrored(false); // Reset error flag when selecting a ship
+                        selectedShip.setErrored(false); 
                         repaint();
                         break;
                     }
@@ -253,7 +252,6 @@ public class Tabuleiro extends JFrame implements Observable{
             }
 
             if (selectedShip != null) {
-                // Ponto de ancoragem: extremidade esquerda da embarcação (primeira célula)
                 Rectangle2D.Double anchorCell = selectedShip.getCells().get(0);
                 double anchorX = anchorCell.getX();
                 double anchorY = anchorCell.getY();
@@ -264,47 +262,12 @@ public class Tabuleiro extends JFrame implements Observable{
         }
     }
 
-/*
     private void handleKeyPress(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             if (!isConfirming) {
                 if (selectedShip != null) {
                     isShipSelected = false;
-                    selectedShip.setErrored(false); // Reset error flag when deselecting a ship
-                    selectedShip = null;
-                    repaint();
-                } else {
-                    int option = JOptionPane.showConfirmDialog(this, "Confirma o posicionamento das suas embarcações?", "Confirmação", JOptionPane.YES_NO_OPTION);
-                    if (option == JOptionPane.YES_OPTION) {
-                        isConfirming = true;
-                        if (!checarInsercao()) {
-                            JOptionPane.showMessageDialog(this, "Erro ao inserir navio. Tente novamente.");
-                            isConfirming = false;
-                            controller.resetTabuleiro(currentPlayer);
-                        } else {
-                            if (currentPlayer == 1) {
-                                currentPlayer = 2;
-                                initializeShips();  // Limpa e inicializa as embarcações para o jogador 2
-                                isConfirming = false;
-                                repaint();
-                            } else {
-                                JOptionPane.showMessageDialog(this, "Ambos os jogadores posicionaram suas embarcações. O jogo pode começar!");
-                                dispose();
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    */
-
-    private void handleKeyPress(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            if (!isConfirming) {
-                if (selectedShip != null) {
-                    isShipSelected = false;
-                    selectedShip.setErrored(false); // Reset error flag when deselecting a ship
+                    selectedShip.setErrored(false); 
                     selectedShip = null;
                     repaint();
                 } else {
@@ -312,7 +275,7 @@ public class Tabuleiro extends JFrame implements Observable{
                     if (option == JOptionPane.YES_OPTION) {
                         isConfirming = true;
                         checarInsercao();
-                        notifyObservers(); // Notify observers about the insertion attempt
+                        notifyObservers(); 
                     }
                 }
             }
@@ -330,39 +293,11 @@ public class Tabuleiro extends JFrame implements Observable{
     }
 
     private void checarInsercao() {
-        /*
-        int startX = getBoardStartX();
-        int startY = getBoardStartY();
-
-        for (Embarcacao ship : ships) {
-            ship.setErrored(false); // Reset error flag before checking
-            String coordenadaInicial = ship.getCoordenadaInicial(startX, startY);
-            int[] coordenada = converterCoordenada(coordenadaInicial);
-            if (coordenada != null) {
-                String orientacao = ship.getOrientacao() == 0 ? "horizontal" : "vertical";
-                inserir = true;
-                if (!controller.inserirNavio(currentPlayer, ship.getTipoNavio(), coordenada[0], coordenada[1], orientacao)) {
-                    ship.setErrored(true); // Marcar navio com erro
-                    selectedShip = ship;
-                    repaint();
-                    return false; // Falha ao inserir navio
-                }
-            } else {
-                ship.setErrored(true); // Marcar navio com erro
-                selectedShip = ship;
-                repaint();
-                return false; // Coordenada inválida
-            }
-        }
-        repaint();
-        return true; // Todos os navios foram inseridos corretamente
-
-         */
-        inserir = false; // Reset insertion flag
-        List<Embarcacao> shipsToProcess = new ArrayList<>(ships); // Create a copy of the ships list
+        inserir = false; 
+        List<Embarcacao> shipsToProcess = new ArrayList<>(ships); 
 
         for (Embarcacao ship : shipsToProcess) {
-            ship.setErrored(false); // Reset error flag before checking
+            ship.setErrored(false); 
             selectedShip = ship;
             String coordenadaInicial = ship.getCoordenadaInicial(getBoardStartX(), getBoardStartY());
             int[] coordenada = converterCoordenada(coordenadaInicial);
@@ -370,7 +305,7 @@ public class Tabuleiro extends JFrame implements Observable{
                 inserir = true;
                 notifyObservers();
             } else {
-                ship.setErrored(true); // Mark ship with error
+                ship.setErrored(true); 
                 repaint();
             }
             if(ship.getErrored()){
@@ -406,15 +341,14 @@ public class Tabuleiro extends JFrame implements Observable{
     public void deselectShip() {
         isShipSelected = false;
         if (selectedShip != null) {
-            selectedShip.setErrored(false); // Reset error flag when deselecting a ship
+            selectedShip.setErrored(false); 
         }
         selectedShip = null;
         repaint();
     }
 
     public void selectShip(){
-        selectedShip.setErrored(true); // Marcar navio com erro
-        //selectedShip = ship;
+        selectedShip.setErrored(true); 
         repaint();
     }
 

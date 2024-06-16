@@ -96,7 +96,7 @@ class Jogador extends Observable {
     }
 
     protected boolean posicaoDisponivel(int linhaInicial, int colunaInicial, int tamanho, String orientacao) {
-        // Verificar se a posiÃ§Ã£o inicial estÃ¡ dentro dos limites
+        // Verificar se a posição inicial esta dentro dos limites
         if ((linhaInicial < 0) || (linhaInicial >= 15) || (colunaInicial >= 15) || (colunaInicial < 0)) {
             return false;
         }
@@ -238,8 +238,6 @@ class Jogador extends Observable {
 
         return resultado;
     }
-
-
 
     protected boolean[][] getTiros() {
         return tiros.getTiros();
