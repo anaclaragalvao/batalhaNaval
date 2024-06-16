@@ -12,7 +12,7 @@ public class ModelAPI implements Observable {
     private Jogador jogador2;
     private List<Observer> observers = new ArrayList<>();
     private boolean inseriuCerto, inseriuErrado, inseriuTodos1, tiro1, tiro2, tiro3, tiro4, tiro5, tiro6, tiro6Diferente, tiro1Diferente, tiro2Diferente, tiro3Diferente,tiro4Diferente,tiro5Diferente = false;
-    int count1, count2 = 0;
+    private static int count1, count2 = 0;
     int currentPlayer, selectedColumn, selecetedRow = 0;
 
     public ModelAPI() {
@@ -167,8 +167,6 @@ public class ModelAPI implements Observable {
                 }
 
             }
-
-
 
         } else {
             if (count2 < 15) {

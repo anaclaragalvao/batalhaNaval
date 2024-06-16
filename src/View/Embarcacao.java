@@ -27,6 +27,10 @@ public class Embarcacao {
         return isErrored ? Color.RED : color; // Retorna vermelho se houver erro
     }
 
+    public boolean getErrored(){
+        return isErrored;
+    }
+
     public int getTipoNavio() {
         return tipoNavio;
     }

@@ -373,6 +373,9 @@ public class Tabuleiro extends JFrame implements Observable{
                 ship.setErrored(true); // Mark ship with error
                 repaint();
             }
+            if(ship.getErrored()){
+                return;
+            }
             selectedShip = null;
         }
 

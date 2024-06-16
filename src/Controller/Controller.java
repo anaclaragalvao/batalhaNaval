@@ -17,7 +17,7 @@ public class Controller implements Observer {
     private ModelAPI model;
     private Tabuleiro tabuleiro;
     private TabuleiroTiro tabuleiroTiro;
-    public int currentPlayer;
+    private static int currentPlayer;
     private static Controller instance;
     Observable obs;
     Object[] dados;
