@@ -1,10 +1,11 @@
-# BatalhaNaval
+# Batalha Naval
 
-BatalhaNaval is a classic Battleship game implemented in Java. This project provides a digital adaptation of the popular naval combat board game, allowing players to engage in strategic ship placement and tactical targeting.
+Batalha Naval is a classic turn-based strategy game implemented in Java. This project recreates the popular game of Battleship, where players strategically place their ships on a grid and attempt to sink their opponent's fleet by guessing their locations.
 
-## File Structure
+## Project Structure
 
 ```
+README.md
 TelaInicio.jpeg
 batalhaObserver.iml
 src
@@ -29,50 +30,36 @@ src
 
 ## Dependencies
 
-This project uses standard Java libraries and does not require external dependencies.
+This project is written in Java and does not rely on external libraries beyond the standard Java Development Kit (JDK).
 
 ## Usage Instructions
 
 ### Installation
 
-1. Clone the repository:
-   ```bash
-   git clone <repository_url>
-   ```
-2. Navigate to the project directory:
-   ```bash
-   cd batalhaNaval
-   ```
-
-### Configuration
-
-No specific configuration is required. The game is ready to run out of the box.
+1.  Ensure you have a Java Development Kit (JDK) installed on your system.
+2.  Clone this repository to your local machine.
 
 ### Running the Game
 
-1. Compile the Java code:
-   ```bash
-   javac src/Main.java
-   ```
-2. Run the main class:
-   ```bash
-   java Main
-   ```
-
-Alternatively, if you have an IDE set up (like IntelliJ IDEA, as suggested by the `.iml` file), you can typically run the `Main` class directly from within the IDE.
+1.  Navigate to the project's root directory in your terminal.
+2.  Compile the Java code:
+    ```bash
+    javac src/Main.java
+    ```
+3.  Run the main class:
+    ```bash
+    java Main
+    ```
+4.  The game's initial screen will appear, and you can follow the on-screen instructions to start playing.
 
 ## Additional Documentation
 
-*   **`TelaInicio.jpeg`**: This image likely serves as the initial welcome screen or logo for the game.
+For a visual overview of the game's starting interface, please refer to `TelaInicio.jpeg`.
 
-## Automated Tests
+## How to Get Help
 
-Information regarding automated tests is not provided.
-
-## Getting Help
-
-For questions or assistance, please refer to the project's source code or contact the developers.
+If you encounter any issues or have questions regarding the Batalha Naval game, please open an issue in this project's repository.
 
 ## License
 
-Information regarding the license is not provided.
+This project is open source and available for use and modification.
