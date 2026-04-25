@@ -1,10 +1,19 @@
-# BatalhaNaval
+# Batalha Naval
 
-BatalhaNaval is a classic Battleship game implemented in Java. This project provides a digital adaptation of the popular naval combat board game, allowing players to engage in strategic ship placement and tactical targeting.
+Este projeto implementa o clássico jogo Batalha Naval em Java.
 
-## File Structure
+## Sobre o Projeto
+
+O Batalha Naval é um jogo de estratégia onde dois jogadores se enfrentam em um tabuleiro para afundar os navios um do outro. O objetivo é adivinhar a posição dos navios do oponente e atacá-los antes que ele afunde seus próprios navios.
+
+## Tecnologias
+
+*   **Linguagem:** Java
+
+## Estrutura do Projeto
 
 ```
+README.md
 TelaInicio.jpeg
 batalhaObserver.iml
 src
@@ -27,52 +36,23 @@ src
         └── TelaInicio.java
 ```
 
-## Dependencies
+## Commits
 
-This project uses standard Java libraries and does not require external dependencies.
+*   **078e2d0e4de31629c6a3d5904fee320a8577d69b:** teste update
+    *   Descrição: teste
+*   **2057e520f28127688a5048dacbf48b056cd5bda4:** create readme
+    *   Descrição: teste readme
+*   **5a337d43ef8700421f3cd18b75813f3bd7ce4a89:** criação readme
+    *   Descrição: readme do projeto
 
-## Usage Instructions
+## Como Executar
 
-### Installation
+*(Instruções para compilação e execução podem ser adicionadas aqui, se aplicável)*
 
-1. Clone the repository:
-   ```bash
-   git clone <repository_url>
-   ```
-2. Navigate to the project directory:
-   ```bash
-   cd batalhaNaval
-   ```
+## Contribuindo
 
-### Configuration
+*(Instruções para contribuição podem ser adicionadas aqui, se aplicável)*
 
-No specific configuration is required. The game is ready to run out of the box.
+## Licença
 
-### Running the Game
-
-1. Compile the Java code:
-   ```bash
-   javac src/Main.java
-   ```
-2. Run the main class:
-   ```bash
-   java Main
-   ```
-
-Alternatively, if you have an IDE set up (like IntelliJ IDEA, as suggested by the `.iml` file), you can typically run the `Main` class directly from within the IDE.
-
-## Additional Documentation
-
-*   **`TelaInicio.jpeg`**: This image likely serves as the initial welcome screen or logo for the game.
-
-## Automated Tests
-
-Information regarding automated tests is not provided.
-
-## Getting Help
-
-For questions or assistance, please refer to the project's source code or contact the developers.
-
-## License
-
-Information regarding the license is not provided.
+*(Informações sobre a licença do projeto podem ser adicionadas aqui, se aplicável)*
